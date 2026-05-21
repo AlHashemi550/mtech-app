@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M•TECH - الأقسام</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;padding-bottom:80px}
+.container{max-width:480px;margin:0 auto;padding:20px 16px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:10px 0 20px}
+.header a{color:#b0b0c0;text-decoration:none;font-size:1.2rem;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#151520;border-radius:50%;border:1px solid #2a2a3a}
+.header h1{font-size:1.8rem;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.search-box{position:relative;margin-bottom:25px}
+.search-box input{width:100%;background:#151520;border:2px solid #2a2a3a;border-radius:25px;padding:14px 45px 14px 20px;color:#fff;font-family:inherit;font-size:0.95rem;outline:none;transition:all 0.3s}
+.search-box input:focus{border-color:#00D4FF;box-shadow:0 0 15px rgba(0,212,255,0.2)}
+.search-box input::placeholder{color:#666680}
+.search-box i{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:#00D4FF;font-size:1.1rem}
+.subtitle{text-align:center;color:#FFD700;font-size:1.3rem;font-weight:800;margin-bottom:5px;text-shadow:0 0 15px rgba(255,215,0,0.3)}
+.desc{text-align:center;color:#666680;font-size:0.85rem;margin-bottom:25px}
+.sections-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:30px}
+.section-card{background:#151520;border:1px solid #2a2a3a;border-radius:20px;padding:25px 15px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}
+.section-card:hover{border-color:#00D4FF;transform:translateY(-5px);box-shadow:0 0 25px rgba(0,212,255,0.2)}
+.section-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00D4FF,#0066CC,#00D4FF)}
+.section-icon{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 12px;box-shadow:0 0 20px rgba(0,0,0,0.3)}
+.section-card h3{font-size:0.95rem;font-weight:800;margin-bottom:6px}
+.section-card p{font-size:0.75rem;color:#666680}
+.flash .section-icon{background:linear-gradient(135deg,#FF6B35,#F7931E);color:#fff}
+.bypass .section-icon{background:linear-gradient(135deg,#00D4FF,#0066CC);color:#fff}
+.format .section-icon{background:linear-gradient(135deg,#FF5252,#D32F2F);color:#fff}
+.f4g .section-icon{background:linear-gradient(135deg,#7C4DFF,#651FFF);color:#fff}
+.volte .section-icon{background:linear-gradient(135deg,#00E676,#00C853);color:#fff}
+.g34 .section-icon{background:linear-gradient(135deg,#FF4081,#F50057);color:#fff}
+.arabic .section-icon{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000}
+.general .section-icon{background:linear-gradient(135deg,#607D8B,#455A64);color:#fff}
+.brands-page{display:none}
+.brands-header{display:flex;align-items:center;gap:15px;margin-bottom:25px}
+.back-btn{width:40px;height:40px;border-radius:50%;background:#151520;border:1px solid #2a2a3a;display:flex;align-items:center;justify-content:center;color:#b0b0c0;font-size:1rem;cursor:pointer;transition:all 0.3s}
+.back-btn:hover{background:#00D4FF;color:#fff;border-color:#00D4FF}
+.brands-header h2{color:#FFD700;font-size:1.3rem}
+.brands-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.brand-card{background:#151520;border:1px solid #2a2a3a;border-radius:16px;padding:20px 10px;text-align:center;cursor:pointer;transition:all 0.3s}
+.brand-card:hover{border-color:#FFD700;transform:scale(1.05);box-shadow:0 0 20px rgba(255,215,0,0.2)}
+.brand-card i{font-size:1.5rem;color:#00D4FF;margin-bottom:8px;display:block}
+.brand-card span{font-size:0.8rem;font-weight:700;color:#fff}
+.coming-soon-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column}
+.coming-soon-overlay.active{display:flex}
+.coming-box{background:#151520;border:2px solid #FFD700;border-radius:24px;padding:40px 30px;text-align:center;max-width:300px;animation:popIn 0.3s ease-out}
+@keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+.coming-box i{font-size:3rem;color:#FFD700;margin-bottom:15px}
+.coming-box h3{color:#FFD700;font-size:1.2rem;margin-bottom:10px}
+.coming-box p{color:#b0b0c0;font-size:0.9rem;margin-bottom:20px}
+.coming-box button{background:linear-gradient(135deg,#FFD700,#FFA500);border:none;border-radius:25px;padding:12px 30px;font-family:inherit;font-size:0.9rem;font-weight:700;color:#000;cursor:pointer}
+.footer{text-align:center;padding:30px 0 20px}
+.dev-name{font-size:1.1rem;font-weight:800;color:#FF69B4;text-shadow:0 0 20px rgba(255,105,180,0.4);margin-bottom:15px}
+.social{display:flex;justify-content:center;gap:20px}
+.social a{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;text-decoration:none;transition:all 0.3s}
+.fb{background:rgba(59,89,152,0.2);color:#4267B2;border:2px solid rgba(59,89,152,0.3)}
+.fb:hover{background:#4267B2;color:#fff;transform:translateY(-3px)}
+.ig{background:rgba(225,48,108,0.2);color:#E1306C;border:2px solid rgba(225,48,108,0.3)}
+.ig:hover{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;transform:translateY(-3px)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(10,10,15,0.95);border-top:1px solid #2a2a3a;display:flex;justify-content:space-around;align-items:center;z-index:1000}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:#666680;font-size:0.7rem;padding:8px 20px}
+.nav-item i{font-size:1.2rem}
+.nav-item.active{color:#FFD700}
+@media(max-width:380px){.sections-grid{grid-template-columns:1fr}.brands-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<div id="main-page">
+<div class="header">
+<a href="/"><i class="fas fa-arrow-right"></i></a>
+<h1>M•TECH</h1>
+<div style="width:40px"></div>
+</div>
+<div class="search-box">
+<input type="text" id="search-input" placeholder="ابحث عن جهاز أو موديل..." onkeyup="searchSections()">
+<i class="fas fa-search"></i>
+</div>
+<h2 class="subtitle">الأقسام التقنية</h2>
+<p class="desc">اختر القسم ثم البراند</p>
+<div class="sections-grid" id="sections-grid">
+<div class="section-card flash" onclick="openSection('flash','التفليش')">
+<div class="section-icon"><i class="fas fa-bolt"></i></div>
+<h3>التفليش</h3>
+<p>فلاش وتحديث الأجهزة</p>
+</div>
+<div class="section-card bypass" onclick="openSection('bypass','التخطي')">
+<div class="section-icon"><i class="fas fa-unlock-alt"></i></div>
+<h3>التخطي</h3>
+<p>تخطي الحمايات</p>
+</div>
+<div class="section-card format" onclick="openSection('format','الفورمات')">
+<div class="section-icon"><i class="fas fa-eraser"></i></div>
+<h3>الفورمات</h3>
+<p>مسح وإعادة ضبط</p>
+</div>
+<div class="section-card f4g" onclick="openSection('f4g','4G')">
+<div class="section-icon"><i class="fas fa-signal"></i></div>
+<h3>4G</h3>
+<p>شبكات الجيل الرابع</p>
+</div>
+<div class="section-card volte" onclick="openSection('volte','VOLTE')">
+<div class="section-icon"><i class="fas fa-phone-volume"></i></div>
+<h3>VOLTE</h3>
+<p>مكالمات عبر LTE</p>
+</div>
+<div class="section-card g34" onclick="openSection('g34','3G & 4G')">
+<div class="section-icon"><i class="fas fa-wifi"></i></div>
+<h3>3G & 4G</h3>
+<p>إعدادات الشبكات</p>
+</div>
+<div class="section-card arabic" onclick="openSection('arabic','التعريب')">
+<div class="section-icon"><i class="fas fa-language"></i></div>
+<h3>التعريب</h3>
+<p>اللغة العربية</p>
+</div>
+<div class="section-card general" onclick="openSection('general','GENERAL')">
+<div class="section-icon"><i class="fas fa-cogs"></i></div>
+<h3>GENERAL</h3>
+<p>إعدادات عامة</p>
+</div>
+</div>
+</div>
+<div class="brands-page" id="brands-page">
+<div class="brands-header">
+<button class="back-btn" onclick="backToSections()"><i class="fas fa-arrow-right"></i></button>
+<h2 id="section-title">التخطي</h2>
+</div>
+<div class="brands-grid" id="brands-grid"></div>
+</div>
+<div class="coming-soon-overlay" id="coming-soon" onclick="closeComingSoon(event)">
+<div class="coming-box">
+<i class="fas fa-tools"></i>
+<h3>قيد الإنشاء</h3>
+<p>سيتم إضافة المعلومات قريباً</p>
+<button onclick="document.getElementById('coming-soon').classList.remove('active')">حسناً</button>
+</div>
+</div>
+<div class="footer">
+<p class="dev-name">المطور: الهاشمي محمد</p>
+<div class="social">
+<a href="https://www.facebook.com/alhashmy.mhmd.647802?mibextid=ZbWKwL" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
+<a href="https://instagram.com/_23abed" target="_blank" class="ig"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+</div>
+<<nav class="bottom-nav">
+<a href="/" class="nav-item"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+<a href="/chat" class="nav-item"><i class="fas fa-comments"></i><span>الدردشة</span></a>
+<a href="/sections" class="nav-item active"><i class="fas fa-th-large"></i><span>الأقسام</span></a>
+</nav>
+<script>
+const brandsData={flash:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'},{name:'Lenovo',icon:'fa-laptop'},{name:'HTC',icon:'fa-mobile'},{name:'Sony',icon:'fa-mobile'},{name:'OnePlus',icon:'fa-mobile'}],bypass:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'}],format:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'}],f4g:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'}],volte:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'}],g34:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'}],arabic:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'}],general:[{name:'Samsung',icon:'fa-mobile-alt'},{name:'Xiaomi',icon:'fa-mobile'},{name:'OPPO',icon:'fa-mobile'},{name:'vivo',icon:'fa-mobile'},{name:'Realme',icon:'fa-mobile'},{name:'Huawei',icon:'fa-mobile'},{name:'LG',icon:'fa-mobile'},{name:'Motorola',icon:'fa-mobile'},{name:'Nokia',icon:'fa-mobile'},{name:'Infinix',icon:'fa-mobile'},{name:'Tecno',icon:'fa-mobile'},{name:'Itel',icon:'fa-mobile'}]};
+function openSection(s,n){document.getElementById('main-page').style.display='none';document.getElementById('brands-page').style.display='block';document.getElementById('section-title').textContent=n;const b=brandsData[s]||[],g=document.getElementById('brands-grid');g.innerHTML='';b.forEach(c=>{const d=document.createElement('div');d.className='brand-card';d.onclick=()=>showComingSoon();d.innerHTML='<i class="fas '+c.icon+'"></i><span>'+c.name+'</span>';g.appendChild(d)})}
+function backToSections(){document.getElementById('brands-page').style.display='none';document.getElementById('main-page').style.display='block'}
+function showComingSoon(){document.getElementById('coming-soon').classList.add('active')}
+function closeComingSoon(e){if(e.target.id==='coming-soon')document.getElementById('coming-soon').classList.remove('active')}
+function searchSections(){const q=document.getElementById('search-input').value.toLowerCase();document.querySelectorAll('.section-card').forEach(c=>{c.style.display=c.textContent.toLowerCase().includes(q)||q===''?'block':'none'})}
+</script>
+</body>
+</html>

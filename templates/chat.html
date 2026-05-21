@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M•TECH - الدردشة الذكية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Tajawal',sans-serif;
+            background:#0a0a0f; color:#fff;
+            min-height:100vh; padding-bottom:130px;
+        }
+        .chat-container { max-width:480px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; }
+        .chat-header {
+            position:sticky; top:0; background:rgba(10,10,15,0.95);
+            border-bottom:1px solid #2a2a3a; padding:12px 16px;
+            display:flex; align-items:center; justify-content:space-between; z-index:100;
+        }
+        .chat-header a { color:#b0b0c0; text-decoration:none; font-size:1.2rem; }
+        .chat-header h2 { color:#FFD700; font-size:1rem; }
+        .chat-header .status { color:#00E676; font-size:0.75rem; }
+        .chat-messages { flex:1; padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:16px; }
+        .msg { display:flex; gap:10px; max-width:90%; animation:slideUp 0.3s ease-out; }
+        @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .msg.ai { align-self:flex-start; }
+        .msg.user { align-self:flex-end; flex-direction:row-reverse; }
+        .msg-avatar { width:36px; height:36px; min-width:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.9rem; }
+        .msg.ai .msg-avatar { background:linear-gradient(135deg,#00D4FF,#0066CC); color:#fff; }
+        .msg.user .msg-avatar { background:linear-gradient(135deg,#FFD700,#FFA500); color:#000; }
+        .msg-content { display:flex; flex-direction:column; gap:4px; max-width:calc(100%-46px); }
+        .msg-bubble { padding:12px 16px; border-radius:16px; font-size:0.9rem; line-height:1.7; word-wrap:break-word; }
+        .msg.ai .msg-bubble { background:#151520; border:1px solid #2a2a3a; border-top-right-radius:4px; color:#b0b0c0; }
+        .msg.user .msg-bubble { background:linear-gradient(135deg,#00D4FF,#0066CC); color:#fff; border-top-left-radius:4px; }
+        .msg-time { font-size:0.7rem; color:#666680; }
+        .typing { display:none; align-items:flex-end; gap:10px; padding:0 16px; margin-bottom:10px; }
+        .typing-bubble { background:#151520; border:1px solid #2a2a3a; border-radius:16px; border-top-right-radius:4px; padding:15px 20px; display:flex; gap:6px; }
+        .typing-bubble span { width:8px; height:8px; background:#00D4FF; border-radius:50%; animation:bounce 1.4s ease-in-out infinite; }
+        .typing-bubble span:nth-child(2){animation-delay:0.2s}
+        .typing-bubble span:nth-child(3){animation-delay:0.4s}
+        @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-10px)} }
+        .input-area {
+            position:fixed; bottom:60px; left:0; right:0;
+            background:rgba(10,10,15,0.95); border-top:1px solid #2a2a3a;
+            padding:10px 16px; z-index:100;
+        }
+        .input-box { display:flex; align-items:flex-end; gap:8px; max-width:480px; margin:0 auto; }
+        .input-box textarea {
+            flex:1; background:#151520; border:1px solid #2a2a3a; border-radius:20px;
+            padding:10px 16px; color:#fff; font-family:inherit; font-size:0.9rem;
+            resize:none; min-height:40px; max-height:120px; outline:none;
+        }
+        .input-box textarea:focus { border-color:#00D4FF; }
+        .input-box button {
+            width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#00D4FF,#0066CC);
+            border:none; color:#fff; font-size:1rem; cursor:pointer;
+        }
+        .bottom-nav {
+            position:fixed; bottom:0; left:0; right:0; height:60px;
+            background:rgba(10,10,15,0.95); border-top:1px solid #2a2a3a;
+            display:flex; justify-content:space-around; align-items:center; z-index:1000;
+        }
+        .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; text-decoration:none; color:#666680; font-size:0.7rem; padding:8px 20px; }
+        .nav-item i { font-size:1.2rem; }
+        .nav-item.active { color:#FFD700; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <a href="/"><i class="fas fa-arrow-right"></i></a>
+            <div>
+                <h2>M•TECH AI</h2>
+                <span class="status">● متصل</span>
+            </div>
+            <button onclick="clearChat()" style="background:none;border:none;color:#666680;cursor:pointer;"><i class="fas fa-trash"></i></button>
+        </div>
+        <div class="chat-messages" id="messages">
+            <div class="msg ai">
+                <div class="msg-avatar"><i class="fas fa-robot"></i></div>
+                <div class="msg-content">
+                    <div class="msg-bubble">
+                        <p>أهلاً بك! 👋</p>
+                        <p>أنا <strong style="color:#FFD700">M•TECH</strong>، مساعدك الذكي.</p>
+                        <p>كيف يمكنني مساعدتك اليوم؟</p>
+                    </div>
+                    <span class="msg-time">الآن</span>
+                </div>
+            </div>
+        </div>
+        <div class="typing" id="typing">
+            <div class="msg-avatar"><i class="fas fa-robot"></i></div>
+            <div class="typing-bubble"><span></span><span></span><span></span></div>
+        </div>
+        <div class="input-area">
+            <div class="input-box">
+                <textarea id="msg-input" placeholder="اكتب رسالتك..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+                <button onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    <nav class="bottom-nav">
+        <a href="/" class="nav-item"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+        <a href="/chat" class="nav-item active"><i class="fas fa-comments"></i><span>الدردشة</span></a>
+        <a href="/sections" class="nav-item"><i class="fas fa-th-large"></i><span>الأقسام</span></a>
+    </nav>
+    <script>
+        let history = [];
+        function sendMsg(){
+            const input = document.getElementById('msg-input');
+            const text = input.value.trim();
+            if(!text) return;
+            addUserMsg(text);
+            input.value = '';
+            input.style.height = 'auto';
+            showTyping();
+            history.push({role:'user',content:text});
+            const msgs = history.map(m=>({role:m.role,content:m.content}));
+            if(!msgs.some(m=>m.role==='system')) msgs.unshift({role:'system',content:'أنت مساعد ذكي متخصص في البرمجة والتقنية. اسمك M•TECH. أجب بالعربية دائماً.'});
+            fetch('/chat-message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:msgs})})
+            .then(r=>r.json())
+            .then(d=>{
+                hideTyping();
+                if(d.success){
+                    addAIMsg(d.result);
+                    history.push({role:'assistant',content:d.raw_result});
+                    localStorage.setItem('mtech_chat', JSON.stringify(history));
+                } else {
+                    addAIMsg('❌ عذراً، حدث خطأ. يرجى المحاولة مرة أخرى.');
+                }
+            })
+            .catch(err=>{ hideTyping(); addAIMsg('❌ خطأ في الاتصال. تحقق من الإنترنت.'); });
+        }
+        function addUserMsg(text){
+            const container = document.getElementById('messages');
+            const div = document.createElement('div'); div.className='msg user';
+            div.innerHTML = '<div class="msg-avatar"><i class="fas fa-user"></i></div><div class="msg-content"><div class="msg-bubble">'+escapeHtml(text)+'</div><span class="msg-time">'+getTime()+'</span></div>';
+            container.appendChild(div); scrollBottom();
+        }
+        function addAIMsg(html){
+            const container = document.getElementById('messages');
+            const div = document.createElement('div'); div.className='msg ai';
+            div.innerHTML = '<div class="msg-avatar"><i class="fas fa-robot"></i></div><div class="msg-content"><div class="msg-bubble">'+html+'</div><span class="msg-time">'+getTime()+'</span></div>';
+            container.appendChild(div); scrollBottom();
+        }
+        function showTyping(){ document.getElementById('typing').style.display='flex'; scrollBottom(); }
+        function hideTyping(){ document.getElementById('typing').style.display='none'; }
+        function scrollBottom(){ document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight; }
+        function escapeHtml(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+        function getTime(){ return new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'}); }
+        function clearChat(){ if(!confirm('مسح المحادثة؟')) return; history=[]; localStorage.removeItem('mtech_chat'); location.reload(); }
+        document.getElementById('msg-input').addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
+    </script>
+</body>
+</html>

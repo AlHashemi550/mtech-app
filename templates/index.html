@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M•TECH - المساعد الذكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Tajawal','Cairo',sans-serif;
+            background:#0a0a0f; color:#fff;
+            min-height:100vh; padding-bottom:70px;
+        }
+        .container { max-width:480px; margin:0 auto; padding:20px 16px; }
+        .title { text-align:center; padding:20px 0; }
+        .title h1 {
+            font-size:3.5rem; font-weight:900; letter-spacing:4px;
+            background:linear-gradient(135deg,#FFD700,#FFA500,#FFD700);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            filter:drop-shadow(0 0 10px rgba(255,215,0,0.5));
+        }
+        .brain {
+            text-align:center; padding:20px 0;
+        }
+        .brain img {
+            width:200px; height:200px; border-radius:50%;
+            filter:drop-shadow(0 0 30px rgba(0,212,255,0.6));
+            animation:float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}
+        }
+        .welcome {
+            background:#151520; border:1px solid #2a2a3a;
+            border-radius:20px; padding:25px 20px; text-align:center;
+            margin:15px 0;
+        }
+        .welcome h2 { color:#FFD700; font-size:1.5rem; margin-bottom:12px; }
+        .welcome p { color:#b0b0c0; font-size:0.95rem; line-height:1.8; }
+        .capture {
+            background:#151520; border:1px solid #2a2a3a;
+            border-radius:20px; padding:25px 20px; margin:15px 0;
+        }
+        .capture h3 { color:#00D4FF; font-size:1.1rem; margin-bottom:15px; }
+        .capture-btns { display:flex; gap:15px; justify-content:center; }
+        .cap-btn {
+            flex:1; max-width:140px; background:#111118;
+            border:2px solid #2a2a3a; border-radius:16px;
+            padding:20px 15px; cursor:pointer; text-align:center;
+            color:#fff; transition:all 0.3s;
+        }
+        .cap-btn:hover { border-color:#00D4FF; transform:translateY(-3px); }
+        .cap-btn i { font-size:2rem; color:#00D4FF; display:block; margin-bottom:8px; }
+        .cap-btn span { font-size:0.85rem; }
+        .preview, .loading, .result { margin-top:20px; display:none; }
+        .preview img { width:100%; border-radius:16px; border:2px solid #00D4FF; }
+        .preview-overlay {
+            display:flex; gap:10px; justify-content:center;
+            margin-top:10px;
+        }
+        .btn {
+            padding:10px 20px; border:none; border-radius:25px;
+            font-family:inherit; font-size:0.9rem; font-weight:600;
+            cursor:pointer; display:flex; align-items:center; gap:6px;
+        }
+        .btn-primary { background:linear-gradient(135deg,#00D4FF,#0066CC); color:#fff; }
+        .btn-secondary { background:rgba(255,255,255,0.1); color:#b0b0c0; border:1px solid #2a2a3a; }
+        .loading { text-align:center; padding:30px; }
+        .spinner {
+            width:50px; height:50px; border:3px solid #2a2a3a;
+            border-top-color:#00D4FF; border-radius:50%;
+            margin:0 auto 15px; animation:spin 1s linear infinite;
+        }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .result { background:#111118; border:1px solid #2a2a3a; border-radius:16px; overflow:hidden; }
+        .result-header { padding:12px 16px; background:rgba(0,230,118,0.1); color:#00E676; font-weight:700; }
+        .result-body { padding:16px; color:#b0b0c0; font-size:0.9rem; line-height:1.8; white-space:pre-wrap; }
+        .result-body a { color:#00D4FF; text-decoration:none; border-bottom:1px dashed #00D4FF; }
+        .next-btn {
+            display:flex; align-items:center; justify-content:center; gap:10px;
+            background:#151520; border:2px solid #2a2a3a; border-radius:50px;
+            padding:12px 30px; text-decoration:none; color:#b0b0c0;
+            font-size:1rem; font-weight:600; margin:20px auto;
+            width:fit-content; transition:all 0.3s;
+        }
+        .next-btn:hover { border-color:#FFD700; color:#FFD700; }
+        .footer {
+            text-align:center; padding:30px 0 20px;
+        }
+        .dev-name {
+            font-size:1.1rem; font-weight:800; color:#FF69B4;
+            text-shadow:0 0 20px rgba(255,105,180,0.4);
+            margin-bottom:15px;
+        }
+        .social { display:flex; justify-content:center; gap:20px; }
+        .social a {
+            width:50px; height:50px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.3rem; text-decoration:none; transition:all 0.3s;
+        }
+        .social .fb { background:rgba(59,89,152,0.2); color:#4267B2; border:2px solid rgba(59,89,152,0.3); }
+        .social .fb:hover { background:#4267B2; color:#fff; transform:translateY(-3px); }
+        .social .ig { background:rgba(225,48,108,0.2); color:#E1306C; border:2px solid rgba(225,48,108,0.3); }
+        .social .ig:hover { background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:#fff; transform:translateY(-3px); }
+        .bottom-nav {
+            position:fixed; bottom:0; left:0; right:0; height:60px;
+            background:rgba(10,10,15,0.95); border-top:1px solid #2a2a3a;
+            display:flex; justify-content:space-around; align-items:center; z-index:1000;
+        }
+        .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; text-decoration:none; color:#666680; font-size:0.7rem; padding:8px 20px; }
+        .nav-item i { font-size:1.2rem; }
+        .nav-item.active { color:#FFD700; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <h1>M•TECH</h1>
+        </div>
+        <div class="brain">
+            <img src="https://images.stockcake.com/public/1/d/b/1db20c50e1f0b6d2d8862e1968b3f0dd60da441c.jpg" alt="AI Brain">
+        </div>
+        <div class="welcome">
+            <h2>أهلاً وسهلاً</h2>
+            <p>في تطبيق <strong style="color:#FFD700">M•TECH</strong> المساعد الذكي والتقني المتمكن<br>هنا ستجد كل ما تحتاجه وستجد جواب لكل سؤال في عالم البرمجة</p>
+        </div>
+        <div class="capture">
+            <h3><i class="fas fa-camera-retro"></i> تحليل الصور بالذكاء الاصطناعي</h3>
+            <div class="capture-btns">
+                <div class="cap-btn" onclick="openCamera()">
+                    <i class="fas fa-camera"></i>
+                    <span>التقاط صورة</span>
+                </div>
+                <div class="cap-btn" onclick="openGallery()">
+                    <i class="fas fa-images"></i>
+                    <span>معرض الصور</span>
+                </div>
+            </div>
+            <input type="file" id="cam-input" accept="image/*" capture="environment" style="display:none">
+            <input type="file" id="gal-input" accept="image/*" style="display:none">
+            <div class="preview" id="preview">
+                <img id="preview-img" src="" alt="Preview">
+                <div class="preview-overlay">
+                    <button class="btn btn-primary" onclick="analyze()"><i class="fas fa-brain"></i> تحليل</button>
+                    <button class="btn btn-secondary" onclick="cancel()"><i class="fas fa-times"></i> إلغاء</button>
+                </div>
+            </div>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="color:#00D4FF">جاري التحليل بالذكاء الاصطناعي...</p>
+            </div>
+            <div class="result" id="result">
+                <div class="result-header"><i class="fas fa-check-circle"></i> نتيجة التحليل</div>
+                <div class="result-body" id="result-body"></div>
+                <button class="btn btn-primary" style="margin:10px 16px; width:calc(100%-32px)" onclick="location.href='/chat'">
+                    <i class="fas fa-comments"></i> استفسار أكثر في الدردشة
+                </button>
+            </div>
+        </div>
+        <a href="/sections" class="next-btn">
+            <span>الأقسام</span>
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="footer">
+            <p class="dev-name">المطور: الهاشمي محمد</p>
+            <div class="social">
+                <a href="https://www.facebook.com/alhashmy.mhmd.647802?mibextid=ZbWKwL" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/_23abed" target="_blank" class="ig"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <nav class="bottom-nav">
+        <a href="/" class="nav-item active"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+        <a href="/chat" class="nav-item"><i class="fas fa-comments"></i><span>الدردشة</span></a>
+        <a href="/sections" class="nav-item"><i class="fas fa-th-large"></i><span>الأقسام</span></a>
+    </nav>
+    <script>
+        let selectedFile = null;
+        function openCamera(){ document.getElementById('cam-input').click(); }
+        function openGallery(){ document.getElementById('gal-input').click(); }
+        document.getElementById('cam-input').addEventListener('change', handleFile);
+        document.getElementById('gal-input').addEventListener('change', handleFile);
+        function handleFile(e){
+            const f = e.target.files[0];
+            if(!f) return;
+            if(!f.type.startsWith('image/')){ alert('❌ يرجى اختيار صورة'); return; }
+            selectedFile = f;
+            const r = new FileReader();
+            r.onload = function(ev){
+                document.getElementById('preview-img').src = ev.target.result;
+                document.getElementById('preview').style.display = 'block';
+                document.getElementById('result').style.display = 'none';
+            };
+            r.readAsDataURL(f);
+        }
+        function cancel(){
+            selectedFile = null;
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+        }
+        function analyze(){
+            if(!selectedFile){ alert('❌ اختر صورة أولاً'); return; }
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            const fd = new FormData();
+            fd.append('image', selectedFile);
+            fetch('/analyze-image',{method:'POST',body:fd})
+            .then(r=>r.json())
+            .then(d=>{
+                document.getElementById('loading').style.display = 'none';
+                if(d.success){
+                    document.getElementById('result-body').innerHTML = d.result;
+                    document.getElementById('result').style.display = 'block';
+                    localStorage.setItem('lastAnalysis', d.raw_result);
+                } else {
+                    alert('❌ خطأ: ' + d.error);
+                    document.getElementById('preview').style.display = 'block';
+                }
+            })
+            .catch(err=>{
+                document.getElementById('loading').style.display = 'none';
+                alert('❌ خطأ في الاتصال');
+                document.getElementById('preview').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

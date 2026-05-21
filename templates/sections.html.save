@@ -1,0 +1,11 @@
+import os
+exit
+
+# إنشاء المجلدات في مسار متاح (داخل مجلد هوم في تيرمكس)
+base_path = os.path.expanduser('~/mtech_app')
+os.makedirs(f'{base_path}/templates', exist_ok=True)
+os.makedirs(f'{base_path}/static/css', exist_ok=True)
+os.makedirs(f'{base_path}/static/js', exist_ok=True)
+
+print(f"✅ تم إنشاء المجلدات بنجاح في: {base_path}")
+
